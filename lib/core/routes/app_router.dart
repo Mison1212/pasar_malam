@@ -7,7 +7,6 @@ import 'package:pasar_malam/features/dashboard/presentation/pages/dashboard_page
 import 'package:pasar_malam/core/widgets/auth_guard.dart';
 
 class AppRouter {
-  // Definisi nama-nama rute
   static const String splash = '/';
   static const String login = '/login';
   static const String register = '/register';
