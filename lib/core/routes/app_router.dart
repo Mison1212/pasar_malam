@@ -18,21 +18,16 @@ class AppRouter {
     switch (settings.name) {
       case splash:
         return MaterialPageRoute(builder: (_) => const SplashPage());
-
       case login:
         return MaterialPageRoute(builder: (_) => const LoginPage());
-
       case register:
         return MaterialPageRoute(builder: (_) => const RegisterPage());
-
       case verifyEmail:
         return MaterialPageRoute(builder: (_) => const VerifyEmailPage());
-
       case dashboard:
         return MaterialPageRoute(
           builder: (_) => const AuthGuard(child: DashboardPage()),
         );
-
       default:
         return MaterialPageRoute(builder: (_) => const SplashPage());
     }
