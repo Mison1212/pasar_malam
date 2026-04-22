@@ -42,7 +42,7 @@ class _SplashPageState extends State<SplashPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Pasar Malam',
+              'Fashion Papua',
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,
