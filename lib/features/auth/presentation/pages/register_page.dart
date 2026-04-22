@@ -43,7 +43,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
     if (!mounted) return;
     if (success) {
-      // Navigasi ke halaman instruksi verifikasi email
       Navigator.pushReplacementNamed(context, AppRouter.verifyEmail);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -72,7 +71,6 @@ class _RegisterPageState extends State<RegisterPage> {
                 children: [
                   const SizedBox(height: 32),
 
-                  // Widget reusable: AuthHeader
                   const AuthHeader(
                     icon: Icons.person_add_alt_1,
                     title: 'Buat Akun Baru',
@@ -80,7 +78,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   const SizedBox(height: 32),
 
-                  // Widget reusable: CustomTextField
                   CustomTextField(
                     label: 'Nama Lengkap',
                     hint: 'Masukkan nama lengkap',
@@ -135,7 +132,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   const SizedBox(height: 28),
 
-                  // Widget reusable: CustomButton
                   CustomButton(
                     label: 'Daftar Sekarang',
                     onPressed: _register,
@@ -143,7 +139,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   const SizedBox(height: 16),
 
-                  // Link ke Login
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
