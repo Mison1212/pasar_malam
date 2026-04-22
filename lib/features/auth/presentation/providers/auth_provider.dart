@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart'; 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:pasar_malam/core/services/secure_storage.dart';
@@ -14,31 +15,30 @@ enum AuthStatus {
 
 class AuthProvider extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: ['email', 'profile'],
+  );
 
   AuthStatus _status = AuthStatus.initial;
   User? _firebaseUser;
   String? _backendToken;
   String? _errorMessage;
 
-  // Getters
   AuthStatus get status => _status;
   User? get firebaseUser => _firebaseUser;
   String? get backendToken => _backendToken;
   String? get errorMessage => _errorMessage;
   bool get isLoading => _status == AuthStatus.loading;
 
-  /// Register a new user
   Future<bool> register({
     required String name,
     required String email,
     required String password,
   }) async {
     try {
-      _status = AuthStatus.loading;
-      notifyListeners();
+      _setLoading();
 
-      // Create user with Firebase
       final userCredential = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
@@ -46,10 +46,7 @@ class AuthProvider extends ChangeNotifier {
 
       _firebaseUser = userCredential.user;
 
-      // Update user profile with name
       await _firebaseUser?.updateDisplayName(name);
-
-      // Send verification email
       await _firebaseUser?.sendEmailVerification();
 
       _status = AuthStatus.emailNotVerified;
@@ -58,23 +55,20 @@ class AuthProvider extends ChangeNotifier {
 
       return true;
     } on FirebaseAuthException catch (e) {
-      _status = AuthStatus.error;
-      _errorMessage = _getFirebaseErrorMessage(e.code);
-      notifyListeners();
+      _setError(_getFirebaseErrorMessage(e.code));
       return false;
     } catch (e) {
-      _status = AuthStatus.error;
-      _errorMessage = 'Terjadi kesalahan: ${e.toString()}';
-      notifyListeners();
+      _setError('Terjadi kesalahan: $e');
       return false;
     }
   }
 
-  /// Login with email and password
-  Future<bool> login({required String email, required String password}) async {
+  Future<bool> login({
+    required String email,
+    required String password,
+  }) async {
     try {
-      _status = AuthStatus.loading;
-      notifyListeners();
+      _setLoading();
 
       final userCredential = await _auth.signInWithEmailAndPassword(
         email: email,
@@ -83,8 +77,8 @@ class AuthProvider extends ChangeNotifier {
 
       _firebaseUser = userCredential.user;
 
-      // Check if email is verified
       await _firebaseUser?.reload();
+
       if (!(_firebaseUser?.emailVerified ?? false)) {
         _status = AuthStatus.emailNotVerified;
         notifyListeners();
@@ -97,39 +91,48 @@ class AuthProvider extends ChangeNotifier {
 
       return true;
     } on FirebaseAuthException catch (e) {
-      _status = AuthStatus.error;
-      _errorMessage = _getFirebaseErrorMessage(e.code);
-      notifyListeners();
+      _setError(_getFirebaseErrorMessage(e.code));
       return false;
     } catch (e) {
-      _status = AuthStatus.error;
-      _errorMessage = 'Terjadi kesalahan: ${e.toString()}';
-      notifyListeners();
+      _setError('Terjadi kesalahan: $e');
       return false;
     }
   }
 
-  /// Sign in with Google
   Future<bool> signInWithGoogle() async {
     try {
-      _status = AuthStatus.loading;
-      notifyListeners();
+      _setLoading();
 
-      final googleUser = await _googleSignIn.signIn();
-      if (googleUser == null) {
-        _status = AuthStatus.unauthenticated;
-        notifyListeners();
-        return false;
+      if (kIsWeb) {
+        final googleProvider = GoogleAuthProvider();
+        googleProvider.addScope('email');
+        googleProvider.addScope('profile');
+        
+        final userCredential = await _auth.signInWithPopup(googleProvider);
+        _firebaseUser = userCredential.user;
+      } else {
+        GoogleSignInAccount? googleUser = await _googleSignIn.signInSilently();
+        googleUser ??= await _googleSignIn.signIn();
+
+        if (googleUser == null) {
+          _status = AuthStatus.unauthenticated;
+          notifyListeners();
+          return false;
+        }
+
+        final googleAuth = await googleUser.authentication;
+        if (googleAuth.accessToken == null) {
+          throw Exception('Access token null');
+        }
+
+        final credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+
+        final userCredential = await _auth.signInWithCredential(credential);
+        _firebaseUser = userCredential.user;
       }
-
-      final googleAuth = await googleUser.authentication;
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-
-      final userCredential = await _auth.signInWithCredential(credential);
-      _firebaseUser = userCredential.user;
 
       _status = AuthStatus.authenticated;
       _errorMessage = null;
@@ -137,14 +140,11 @@ class AuthProvider extends ChangeNotifier {
 
       return true;
     } catch (e) {
-      _status = AuthStatus.error;
-      _errorMessage = 'Google Sign-In gagal: ${e.toString()}';
-      notifyListeners();
+      _setError('Google Sign-In gagal: $e');
       return false;
     }
   }
 
-  /// Sign out
   Future<void> signOut() async {
     try {
       await _auth.signOut();
@@ -157,12 +157,10 @@ class AuthProvider extends ChangeNotifier {
       _errorMessage = null;
       notifyListeners();
     } catch (e) {
-      _errorMessage = 'Sign out gagal: ${e.toString()}';
-      notifyListeners();
+      _setError('Sign out gagal: $e');
     }
   }
 
-  /// Resend verification email
   Future<bool> resendVerificationEmail() async {
     try {
       if (_firebaseUser == null) {
@@ -174,18 +172,14 @@ class AuthProvider extends ChangeNotifier {
       _errorMessage = null;
       return true;
     } catch (e) {
-      _errorMessage = 'Gagal mengirim email verifikasi: ${e.toString()}';
-      notifyListeners();
+      _setError('Gagal kirim email verifikasi: $e');
       return false;
     }
   }
 
-  /// Check if email has been verified
   Future<bool> checkEmailVerified() async {
     try {
-      if (_firebaseUser == null) {
-        return false;
-      }
+      if (_firebaseUser == null) return false;
 
       await _firebaseUser!.reload();
       _firebaseUser = _auth.currentUser;
@@ -199,17 +193,26 @@ class AuthProvider extends ChangeNotifier {
 
       return false;
     } catch (e) {
-      _errorMessage = 'Gagal memeriksa verifikasi email: ${e.toString()}';
-      notifyListeners();
+      _setError('Gagal cek verifikasi: $e');
       return false;
     }
   }
 
-  /// Get Firebase error message in Indonesian
+  void _setLoading() {
+    _status = AuthStatus.loading;
+    notifyListeners();
+  }
+
+  void _setError(String message) {
+    _status = AuthStatus.error;
+    _errorMessage = message;
+    notifyListeners();
+  }
+
   String _getFirebaseErrorMessage(String code) {
     switch (code) {
       case 'weak-password':
-        return 'Password terlalu lemah. Gunakan minimal 8 karakter.';
+        return 'Password terlalu lemah.';
       case 'email-already-in-use':
         return 'Email sudah terdaftar.';
       case 'invalid-email':
@@ -219,7 +222,7 @@ class AuthProvider extends ChangeNotifier {
       case 'wrong-password':
         return 'Password salah.';
       default:
-        return 'Terjadi kesalahan authentication: $code';
+        return 'Terjadi kesalahan: $code';
     }
   }
 }
