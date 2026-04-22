@@ -211,10 +211,10 @@ class _DashboardPageState extends State<DashboardPage> {
                   child: ListView.separated(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     scrollDirection: Axis.horizontal,
-                    itemCount: product.products.length,
+                    itemCount: product.products.take(6).length,
                     separatorBuilder: (context, index) => const SizedBox(width: 16),
                     itemBuilder: (context, i) {
-                      final p = product.products[i];
+                      final p = product.products.take(6).toList()[i];
                       return Container(
                         width: 180, 
                         decoration: BoxDecoration(
@@ -355,7 +355,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 const Padding(
                   padding: EdgeInsets.fromLTRB(20, 0, 20, 16),
                   child: Text(
-                    'Katalog Tambahan (Baris Baru)',
+                    'Produk Terbaru',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
@@ -365,17 +365,15 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
                 SizedBox(
                   height: 280,
-                  // Ini adalah placeholder (titipan) list kedua.
-                  // Saat ini isinya saya samakan dengan produk yang di atas.
-                  // Nanti Anda tinggal mengubah product.products menjadi variabel baru 
-                  // dari database Anda (misal product.katalogBaru).
+                  // Produk Terbaru mengambil data setelah index ke-5, lalu urutannya dibalik
+                  // agar produk yang baru saja dimasukkan ke database muncul paling awal.
                   child: ListView.separated(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     scrollDirection: Axis.horizontal,
-                    itemCount: product.products.length,
+                    itemCount: product.products.skip(6).length,
                     separatorBuilder: (context, index) => const SizedBox(width: 16),
                     itemBuilder: (context, i) {
-                      final p = product.products[i];
+                      final p = product.products.skip(6).toList().reversed.toList()[i];
                       return Container(
                         width: 180, 
                         decoration: BoxDecoration(
