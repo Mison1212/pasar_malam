@@ -1,5 +1,5 @@
 class ApiConstants {
-  static const String baseUrl = 'http://192.168.100.69/api_php';
+  static const String baseUrl = 'http://10.206.223.84/api_php';
 
   static const String products = '/products.php';
 
