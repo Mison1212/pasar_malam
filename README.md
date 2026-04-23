@@ -7,34 +7,22 @@ Mata Kuliah : Pemrograman Mobile Lanjutan
 
 
 ## Hasil tampilan aplikasi
-
+![alt text](assets/images/splash.png)
 ![alt text](<assets/images/1. loading aplikasi.png>)
-1. loading aplikasi
-![alt text](<1. loading aplikasi.png>)
-2. tampilan login
-![alt text](<2. tampilan login.png>)
-3. daftar akun
-![alt text](<3. daftar akun.png>)
-4. cek link verifikasi di email
-![alt text](<4. cek link verifikasi di email.png>)
-5. verifikasi email
-![alt text](<4. verifikasi email.jpeg>)
-![alt text](<5. di dalam spam.png>)
-![alt text](<6. klik link verifikasi.png>)
-![alt text](<7. email berhasil terverifikasi.png>)
-8. login dengan google
-![alt text](<8. login dengan google.png>)
-9. pilih akun google
-![alt text](<9. pilih akun google.png>)
-10. login email
-![alt text](<10. login email.png>)
-11. loading tampilan produk
-![alt text](<11. loading tampilan produk.png>)
-12. catalog tampilan produk
-![alt text](<12. catalog tampilan produk.png>)
-13. like produk
-![alt text](<13. like produk.png>)
-14. keranjang like produk
-![alt text](<14. keranjang like produk.png>)
-15. tampilan database
-![alt text](<15. tampilan database.png>)
+![alt text](<assets/images/2. tampilan login.png>)
+![alt text](<assets/images/3. daftar akun.png>)
+![alt text](<assets/images/4. cek link verifikasi di email.png>)
+![alt text](<assets/images/4. verifikasi email.jpeg>)
+![alt text](<assets/images/5. di dalam spam.png>)
+![alt text](<assets/images/6. klik link verifikasi.png>)
+![alt text](<assets/images/7. email berhasil terverifikasi.png>)
+![alt text](<assets/images/8. login dengan google.png>)
+![alt text](<assets/images/9. pilih akun google.png>)
+![alt text](<assets/images/10. login email.png>)
+![alt text](assets/images/loading_produk.png)
+![alt text](<assets/images/15. tampilan database.png>)
+![alt text](assets/images/tampilan_produk.png)
+![alt text](assets/images/detile_produk.png)
+![alt text](assets/images/keranjang_belanja.png)
+![alt text](assets/images/checkout.png)
+![alt text](assets/images/buat_pesanan.png)
