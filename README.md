@@ -8,6 +8,7 @@ Mata Kuliah : Pemrograman Mobile Lanjutan
 
 ## Hasil tampilan aplikasi
 
+![alt text](<assets/images/1. loading aplikasi.png>)
 1. loading aplikasi
 ![alt text](<1. loading aplikasi.png>)
 2. tampilan login
