@@ -41,8 +41,17 @@ class _RegisterPageState extends State<RegisterPage> {
       password: _passCtrl.text,
     );
 
-    if (!mounted) return;
     if (success) {
+      if (!mounted) return;
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Pendaftaran berhasil! Menunggu verifikasi email...'),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 3),
+        ),
+      );
+      
       Navigator.pushReplacementNamed(context, AppRouter.verifyEmail);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
