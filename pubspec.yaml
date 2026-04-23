@@ -61,14 +61,14 @@ dev_dependencies:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/icons/batik_papua.jpg"
+  image_path: "assets/icons/batik_papua.png"
 
 flutter_native_splash:
   color: "#1A237E"
-  image: "assets/icons/batik_papua.jpg"
+  image: "assets/icons/batik_papua.png"
   android_12:
     color: "#1A237E"
-    image: "assets/icons/batik_papua.jpg"
+    image: "assets/icons/batik_papua.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
