@@ -3,6 +3,7 @@ import 'package:pasar_malam/core/routes/app_router.dart';
 import 'package:pasar_malam/features/auth/presentation/providers/auth_provider.dart';
 import 'package:pasar_malam/features/dashboard/presentation/providers/product_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:pasar_malam/features/cart/presentation/providers/cart_provider.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -23,6 +24,7 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
     final product = context.watch<ProductProvider>();
+    final cart = context.watch<CartProvider>();
 
     double screenWidth = MediaQuery.of(context).size.width;
     int crossAxisCount = screenWidth > 900 ? 4 : (screenWidth > 600 ? 3 : 2);
@@ -79,10 +81,10 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
                 child: IconButton(
                   icon: const Icon(Icons.shopping_cart_outlined, color: Colors.white, size: 22),
-                  onPressed: () => _showCartSheet(context, product),
+                  onPressed: () => Navigator.pushNamed(context, AppRouter.cart),
                 ),
               ),
-              if (product.likedProductIds.isNotEmpty)
+              if (cart.itemCount > 0)
                 Positioned(
                   right: 8,
                   top: 8,
@@ -94,7 +96,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       border: Border.all(color: const Color(0xFF3949AB), width: 1.5),
                     ),
                     child: Text(
-                      '${product.likedProductIds.length}',
+                      '${cart.itemCount}',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 9,
@@ -121,20 +123,6 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
           ),
         ],
-      ),
-
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Membuka Form Tambah Produk...')),
-          );
-        },
-        backgroundColor: const Color(0xFF1A237E),
-        icon: const Icon(Icons.add_shopping_cart_rounded, color: Colors.white),
-        label: const Text(
-          'Tambah Produk',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
       ),
 
       body: switch (product.status) {
@@ -215,8 +203,12 @@ class _DashboardPageState extends State<DashboardPage> {
                     separatorBuilder: (context, index) => const SizedBox(width: 16),
                     itemBuilder: (context, i) {
                       final p = product.products.take(6).toList()[i];
-                      return Container(
-                        width: 180, 
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, AppRouter.productDetail, arguments: p);
+                        },
+                        child: Container(
+                          width: 180, 
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(20), 
@@ -297,6 +289,33 @@ class _DashboardPageState extends State<DashboardPage> {
                                       ),
                                     ),
                                   ),
+                                  Positioned(
+                                    bottom: 8,
+                                    right: 8,
+                                    child: Material(
+                                      color: const Color(0xFF1A237E),
+                                      shape: const CircleBorder(),
+                                      elevation: 2,
+                                      child: InkWell(
+                                        borderRadius: BorderRadius.circular(50),
+                                        onTap: () {
+                                          cart.addItem(p);
+                                          ScaffoldMessenger.of(context).clearSnackBars();
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            const SnackBar(content: Text('Dimasukkan ke keranjang'), duration: Duration(seconds: 1)),
+                                          );
+                                        },
+                                        child: const Padding(
+                                          padding: EdgeInsets.all(6),
+                                          child: Icon(
+                                            Icons.add_shopping_cart,
+                                            color: Colors.white,
+                                            size: 20,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -347,6 +366,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             ),
                           ],
                         ),
+                      ),
                       );
                     },
                   ),
@@ -365,8 +385,6 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
                 SizedBox(
                   height: 280,
-                  // Produk Terbaru mengambil data setelah index ke-5, lalu urutannya dibalik
-                  // agar produk yang baru saja dimasukkan ke database muncul paling awal.
                   child: ListView.separated(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     scrollDirection: Axis.horizontal,
@@ -374,8 +392,12 @@ class _DashboardPageState extends State<DashboardPage> {
                     separatorBuilder: (context, index) => const SizedBox(width: 16),
                     itemBuilder: (context, i) {
                       final p = product.products.skip(6).toList().reversed.toList()[i];
-                      return Container(
-                        width: 180, 
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, AppRouter.productDetail, arguments: p);
+                        },
+                        child: Container(
+                          width: 180, 
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(20), 
@@ -456,6 +478,33 @@ class _DashboardPageState extends State<DashboardPage> {
                                       ),
                                     ),
                                   ),
+                                  Positioned(
+                                    bottom: 8,
+                                    right: 8,
+                                    child: Material(
+                                      color: const Color(0xFF1A237E),
+                                      shape: const CircleBorder(),
+                                      elevation: 2,
+                                      child: InkWell(
+                                        borderRadius: BorderRadius.circular(50),
+                                        onTap: () {
+                                          cart.addItem(p);
+                                          ScaffoldMessenger.of(context).clearSnackBars();
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            const SnackBar(content: Text('Dimasukkan ke keranjang'), duration: Duration(seconds: 1)),
+                                          );
+                                        },
+                                        child: const Padding(
+                                          padding: EdgeInsets.all(6),
+                                          child: Icon(
+                                            Icons.add_shopping_cart,
+                                            color: Colors.white,
+                                            size: 20,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -506,6 +555,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             ),
                           ],
                         ),
+                      ),
                       );
                     },
                   ),
