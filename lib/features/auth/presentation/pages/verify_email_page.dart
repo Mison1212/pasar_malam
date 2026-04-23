@@ -37,7 +37,16 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
       final success = await auth.checkEmailVerified();
       if (success && mounted) {
         _timer?.cancel();
-        Navigator.pushReplacementNamed(context, AppRouter.dashboard);
+        await auth.signOut();
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Email berhasil diverifikasi! Silakan login sekarang.'),
+              backgroundColor: Colors.green,
+            ),
+          );
+          Navigator.pushReplacementNamed(context, AppRouter.login);
+        }
       }
     });
   }
