@@ -7,6 +7,8 @@ Mata Kuliah : Pemrograman Mobile Lanjutan
 
 
 ## Hasil tampilan aplikasi
+
+![alt text](assets/images/splash_awal_aplikasi.png)
 ![alt text](assets/images/splash.png)
 ![alt text](<assets/images/1. loading aplikasi.png>)
 ![alt text](<assets/images/2. tampilan login.png>)
