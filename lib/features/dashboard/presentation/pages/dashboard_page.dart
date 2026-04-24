@@ -25,6 +25,7 @@ class _DashboardPageState extends State<DashboardPage> {
     final auth = context.watch<AuthProvider>();
     final product = context.watch<ProductProvider>();
     final cart = context.watch<CartProvider>();
+    final userId = auth.firebaseUser?.uid;
 
     double screenWidth = MediaQuery.of(context).size.width;
     int crossAxisCount = screenWidth > 900 ? 4 : (screenWidth > 600 ? 3 : 2);
@@ -60,7 +61,7 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             const SizedBox(height: 2),
             Text(
-              'Halo, ${auth.firebaseUser?.displayName ?? 'Mison Wenda'} 👋',
+              'Halo, ${auth.firebaseUser?.displayName ?? 'Pengguna'} 👋',
               style: const TextStyle(
                 fontSize: 13,
                 color: Colors.white70,
@@ -116,9 +117,11 @@ class _DashboardPageState extends State<DashboardPage> {
             child: IconButton(
               icon: const Icon(Icons.logout_rounded, color: Colors.white70, size: 22),
               onPressed: () async {
-                await auth.signOut();
+                // Navigate dulu SEBELUM signOut() agar dashboard tidak sempat
+                // rebuild dengan firebaseUser == null (mencegah flicker nama fallback)
                 if (!mounted) return;
                 Navigator.pushReplacementNamed(context, AppRouter.login);
+                auth.signOut(); // sengaja tidak di-await agar navigasi lebih dahulu
               },
             ),
           ),
@@ -273,7 +276,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                       elevation: 2,
                                       child: InkWell(
                                         borderRadius: BorderRadius.circular(50),
-                                        onTap: () => product.toggleLike(p.id),
+                                        onTap: () => product.toggleLike(p.id, userId: userId),
                                         child: Padding(
                                           padding: const EdgeInsets.all(6),
                                           child: Icon(
@@ -299,7 +302,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                       child: InkWell(
                                         borderRadius: BorderRadius.circular(50),
                                         onTap: () {
-                                          cart.addItem(p);
+                                          cart.addItem(p, userId: userId);
                                           ScaffoldMessenger.of(context).clearSnackBars();
                                           ScaffoldMessenger.of(context).showSnackBar(
                                             const SnackBar(content: Text('Dimasukkan ke keranjang'), duration: Duration(seconds: 1)),
@@ -462,7 +465,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                       elevation: 2,
                                       child: InkWell(
                                         borderRadius: BorderRadius.circular(50),
-                                        onTap: () => product.toggleLike(p.id),
+                                        onTap: () => product.toggleLike(p.id, userId: userId),
                                         child: Padding(
                                           padding: const EdgeInsets.all(6),
                                           child: Icon(
@@ -488,7 +491,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                       child: InkWell(
                                         borderRadius: BorderRadius.circular(50),
                                         onTap: () {
-                                          cart.addItem(p);
+                                          cart.addItem(p, userId: userId);
                                           ScaffoldMessenger.of(context).clearSnackBars();
                                           ScaffoldMessenger.of(context).showSnackBar(
                                             const SnackBar(content: Text('Dimasukkan ke keranjang'), duration: Duration(seconds: 1)),
