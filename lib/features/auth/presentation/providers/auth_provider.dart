@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart'; 
+import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:pasar_malam/core/services/secure_storage.dart';
+import 'package:pasar_malam/core/services/dio_client.dart';
+import 'package:pasar_malam/core/constants/api_constants.dart';
 
 enum AuthStatus {
   initial,
@@ -53,6 +55,9 @@ class AuthProvider extends ChangeNotifier {
       _errorMessage = null;
       notifyListeners();
 
+      
+      await _syncUserToMySQL(_firebaseUser!);
+
       return true;
     } on FirebaseAuthException catch (e) {
       _setError(_getFirebaseErrorMessage(e.code));
@@ -88,6 +93,9 @@ class AuthProvider extends ChangeNotifier {
       _status = AuthStatus.authenticated;
       _errorMessage = null;
       notifyListeners();
+
+      
+      await _syncUserToMySQL(_firebaseUser!);
 
       return true;
     } on FirebaseAuthException catch (e) {
@@ -138,10 +146,32 @@ class AuthProvider extends ChangeNotifier {
       _errorMessage = null;
       notifyListeners();
 
+      await _syncUserToMySQL(_firebaseUser!);
+
       return true;
     } catch (e) {
       _setError('Google Sign-In gagal: $e');
       return false;
+    }
+  }
+
+  Future<void> _syncUserToMySQL(User user) async {
+    try {
+      final response = await DioClient.instance.post(
+        ApiConstants.saveUser,
+        data: {
+          'firebase_uid': user.uid,
+          'name': user.displayName ?? '',
+          'email': user.email ?? '',
+          'photo_url': user.photoURL ?? '',
+          'provider': user.providerData.isNotEmpty
+              ? user.providerData.first.providerId
+              : 'password',
+        },
+      );
+      debugPrint('[SYNC] Berhasil: ${response.data}');
+    } catch (e) {
+      debugPrint('[SYNC ERROR] Detail: $e');
     }
   }
 
