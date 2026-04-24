@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:pasar_malam/core/constants/api_constants.dart';
 import 'package:pasar_malam/core/services/dio_client.dart';
+import 'package:pasar_malam/core/services/user_data_storage.dart';
 import 'package:pasar_malam/features/dashboard/data/models/product_model.dart';
 
 enum ProductStatus { initial, loading, loaded, error }
@@ -19,12 +20,37 @@ class ProductProvider extends ChangeNotifier {
   bool get isLoading => _status == ProductStatus.loading;
   Set<int> get likedProductIds => _likedProductIds;
 
-  void toggleLike(int productId) {
+
+  Future<void> loadUserLikes(String userId) async {
+    final saved = await UserDataStorage.loadLikes(userId);
+    _likedProductIds.clear();
+    _likedProductIds.addAll(saved);
+    notifyListeners();
+  }
+
+  Future<void> _saveLikes(String userId) async {
+    await UserDataStorage.saveLikes(userId, _likedProductIds.toList());
+  }
+
+
+  void toggleLike(int productId, {String? userId}) {
     if (_likedProductIds.contains(productId)) {
       _likedProductIds.remove(productId);
     } else {
       _likedProductIds.add(productId);
     }
+    notifyListeners();
+    if (userId != null) _saveLikes(userId);
+  }
+
+  Future<void> saveAndClearForUser(String userId) async {
+    await _saveLikes(userId);
+    _likedProductIds.clear();
+    notifyListeners();
+  }
+
+  void clearUserData() {
+    _likedProductIds.clear();
     notifyListeners();
   }
 
@@ -45,7 +71,7 @@ class ProductProvider extends ChangeNotifier {
 
       _products = data.map((e) => ProductModel.fromJson(e)).toList();
       _status = ProductStatus.loaded;
-      _error = null; 
+      _error = null;
     } on DioException catch (e) {
       if (e.response != null && e.response?.data is Map) {
         _error = e.response?.data['message'] ?? 'Gagal memuat produk dari server';
