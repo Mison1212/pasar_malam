@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
 import 'package:pasar_malam/core/routes/app_router.dart';
+import 'package:pasar_malam/features/auth/presentation/providers/auth_provider.dart';
+import 'package:provider/provider.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -57,6 +59,12 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
 
     if (user != null) {
       if (user.emailVerified) {
+        // Muat data cart & likes milik user ini (auto-login dari sesi yang tersimpan)
+        final auth = context.read<AuthProvider>();
+        if (auth.onLogin != null) {
+          await auth.onLogin!(user.uid);
+        }
+        if (!mounted) return;
         Navigator.pushReplacementNamed(context, AppRouter.dashboard);
       } else {
         Navigator.pushReplacementNamed(context, AppRouter.verifyEmail);
