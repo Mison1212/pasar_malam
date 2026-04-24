@@ -13,12 +13,30 @@ void main() async {
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
+  final authProvider = AuthProvider();
+  final productProvider = ProductProvider();
+  final cartProvider = CartProvider();
+
+  authProvider.onLogin = (String userId) async {
+    await Future.wait([
+      cartProvider.loadUserCart(userId),
+      productProvider.loadUserLikes(userId),
+    ]);
+  };
+
+  authProvider.onSignOut = (String userId) async {
+    await Future.wait([
+      cartProvider.saveAndClearForUser(userId),
+      productProvider.saveAndClearForUser(userId),
+    ]);
+  };
+
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AuthProvider()),
-        ChangeNotifierProvider(create: (_) => ProductProvider()),
-        ChangeNotifierProvider(create: (_) => CartProvider()),
+        ChangeNotifierProvider.value(value: authProvider),
+        ChangeNotifierProvider.value(value: productProvider),
+        ChangeNotifierProvider.value(value: cartProvider),
       ],
       child: const MyApp(),
     ),
