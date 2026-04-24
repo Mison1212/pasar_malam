@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:pasar_malam/features/auth/presentation/providers/auth_provider.dart';
 import 'package:pasar_malam/features/cart/presentation/providers/cart_provider.dart';
 import 'package:pasar_malam/core/routes/app_router.dart';
 import 'package:pasar_malam/features/dashboard/data/models/product_model.dart'; 
@@ -10,6 +11,7 @@ class CartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cart = context.watch<CartProvider>();
+    final userId = context.read<AuthProvider>().firebaseUser?.uid;
 
     return Scaffold(
       appBar: AppBar(
@@ -68,14 +70,14 @@ class CartPage extends StatelessWidget {
                             IconButton(
                               icon: const Icon(Icons.remove_circle_outline, color: Colors.red),
                               onPressed: () {
-                                cart.removeSingleItem(it.product.id);
+                                cart.removeSingleItem(it.product.id, userId: userId);
                               },
                             ),
                             Text('${it.quantity}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                             IconButton(
                               icon: const Icon(Icons.add_circle_outline, color: Colors.green),
                               onPressed: () {
-                                cart.addItem(it.product);
+                                cart.addItem(it.product, userId: userId);
                               },
                             ),
                           ],
