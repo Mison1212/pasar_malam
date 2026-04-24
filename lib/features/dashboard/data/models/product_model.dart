@@ -23,6 +23,14 @@ class ProductModel extends Equatable {
     category: json['category']?.toString() ?? 'Umum',
   );
 
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'name': name,
+    'price': price,
+    'image_url': imageUrl,
+    'category': category,
+  };
+
   @override
   List<Object?> get props => [id, name, price, imageUrl, category];
 }
