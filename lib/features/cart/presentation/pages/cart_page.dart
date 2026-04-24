@@ -22,7 +22,7 @@ class CartPage extends StatelessWidget {
       body: cart.items.isEmpty
           ? const Center(
               child: Text(
-                'Keranjang Anda kososng',
+                'Keranjang Anda kosong',
                 style: TextStyle(fontSize: 18, color: Colors.grey),
               ),
             )
