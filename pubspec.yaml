@@ -38,6 +38,7 @@ dependencies:
   flutter_secure_storage: ^10.0.0 # Simpan token terenkripsi
   email_validator: ^3.0.0         # Validasi format email
   equatable: ^2.0.8               # Perbandingan object (ProductModel)
+  shared_preferences: ^2.3.2      # Persistensi data cart & likes per-user
 
 
 
