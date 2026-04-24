@@ -27,6 +27,10 @@ class AuthProvider extends ChangeNotifier {
   String? _backendToken;
   String? _errorMessage;
 
+  Future<void> Function(String userId)? onSignOut;
+
+  Future<void> Function(String userId)? onLogin;
+
   AuthStatus get status => _status;
   User? get firebaseUser => _firebaseUser;
   String? get backendToken => _backendToken;
@@ -94,8 +98,11 @@ class AuthProvider extends ChangeNotifier {
       _errorMessage = null;
       notifyListeners();
 
-      
       await _syncUserToMySQL(_firebaseUser!);
+
+      if (onLogin != null && _firebaseUser != null) {
+        await onLogin!(_firebaseUser!.uid);
+      }
 
       return true;
     } on FirebaseAuthException catch (e) {
@@ -148,6 +155,10 @@ class AuthProvider extends ChangeNotifier {
 
       await _syncUserToMySQL(_firebaseUser!);
 
+      if (onLogin != null && _firebaseUser != null) {
+        await onLogin!(_firebaseUser!.uid);
+      }
+
       return true;
     } catch (e) {
       _setError('Google Sign-In gagal: $e');
@@ -177,6 +188,11 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> signOut() async {
     try {
+      final uid = _firebaseUser?.uid;
+      if (onSignOut != null && uid != null) {
+        await onSignOut!(uid);
+      }
+
       await _auth.signOut();
       await _googleSignIn.signOut();
       await SecureStorageService.clearAll();
