@@ -6,6 +6,10 @@ Kelas : TI SE 23 P2
 Mata Kuliah : Pemrograman Mobile Lanjutan
 
 
+## Link Youtube Presentasi
+
+- [Presentasi](https://youtu.be/rzoajJj3EIw)
+
 ## Hasil tampilan aplikasi
 
 ![alt text](assets/images/splash_awal_aplikasi.png)
