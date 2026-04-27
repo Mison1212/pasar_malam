@@ -8,7 +8,7 @@ Mata Kuliah : Pemrograman Mobile Lanjutan
 
 ## Link Youtube Presentasi
 
-- [Presentasi](https://youtu.be/rzoajJj3EIw)
+- [Presentasi](https://youtu.be/Ffg01Nc8iTc)
 
 - [link firebase console](https://console.firebase.google.com/u/0/project/pasar-malam-b924a/overview?hl=id)
 
