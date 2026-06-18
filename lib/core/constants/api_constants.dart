@@ -1,6 +1,5 @@
 class ApiConstants {
-  static const String baseUrl = 'http://169.254.233.32/api_php';
-
+  static const String baseUrl = 'http://192.168.13.214/api_php';
 
   static const String products = '/products.php';
   static const String saveUser = '/save_users.php';
