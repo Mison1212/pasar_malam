@@ -39,6 +39,8 @@ dependencies:
   email_validator: ^3.0.0         # Validasi format email
   equatable: ^2.0.8               # Perbandingan object (ProductModel)
   shared_preferences: ^2.3.2      # Persistensi data cart & likes per-user
+  cloud_firestore: 6.5.0          # Database Firestore untuk E-Wallet
+  crypto: ^3.0.6                   # SHA-256 hashing untuk PIN E-Wallet
 
 
 
