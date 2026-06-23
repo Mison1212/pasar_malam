@@ -6,7 +6,7 @@ import 'package:pasar_malam/core/services/secure_storage.dart';
 class DioClient {
   static Dio? _instance;
   static Dio get instance {
-    _instance ??= _createDio(); // Singleton pattern
+    _instance ??= _createDio(); 
     return _instance!;
   }
 
@@ -20,7 +20,7 @@ class DioClient {
       ),
     );
 
-    // Interceptor 1: Logging
+    
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
@@ -34,14 +34,14 @@ class DioClient {
         onError: (error, handler) async {
           debugPrint('[ERROR] ${error.response?.statusCode}');
           if (error.response?.statusCode == 401) {
-            await SecureStorageService.clearAll(); // Auto logout
+            await SecureStorageService.clearAll(); 
           }
           handler.next(error);
         },
       ),
     );
 
-    // Interceptor 2: Auto-inject Bearer Token
+    
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
