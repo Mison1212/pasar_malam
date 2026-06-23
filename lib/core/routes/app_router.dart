@@ -12,10 +12,11 @@ import 'package:pasar_malam/features/wallet/presentation/pages/wallet_dashboard_
 import 'package:pasar_malam/features/wallet/presentation/pages/topup_page.dart';
 import 'package:pasar_malam/features/wallet/presentation/pages/setup_pin_page.dart';
 import 'package:pasar_malam/features/orders/presentation/pages/order_success_page.dart';
+import 'package:pasar_malam/features/orders/presentation/pages/payment_result_page.dart';
 import 'package:pasar_malam/core/widgets/auth_guard.dart';
 
 class AppRouter {
-  // ==================== ROUTE NAMES ====================
+  
   static const String splash = '/';
   static const String login = '/login';
   static const String register = '/register';
@@ -25,13 +26,14 @@ class AppRouter {
   static const String checkout = '/checkout';
   static const String productDetail = '/product-detail';
 
-  // Route baru untuk E-Wallet & Orders
+  
   static const String wallet = '/wallet';
   static const String topUp = '/topup';
   static const String setupPin = '/setup-pin';
   static const String orderSuccess = '/order-success';
+  static const String paymentResult = '/payment-result';
 
-  // ==================== ROUTE GENERATOR ====================
+  
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case splash:
@@ -60,7 +62,7 @@ class AppRouter {
           builder: (_) => AuthGuard(child: ProductDetailPage(product: product)),
         );
 
-      // ==================== ROUTE E-WALLET ====================
+      
       case wallet:
         return MaterialPageRoute(
           builder: (_) => const AuthGuard(child: WalletDashboardPage()),
@@ -74,13 +76,21 @@ class AppRouter {
           builder: (_) => const AuthGuard(child: SetupPinPage()),
         );
 
-      // ==================== ROUTE ORDERS ====================
+      
       case orderSuccess:
         final args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
           builder: (_) => OrderSuccessPage(
             orderId: args['orderId'] as String,
             totalAmount: args['totalAmount'] as double,
+          ),
+        );
+      case paymentResult:
+        final args = settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          builder: (_) => PaymentResultPage(
+            orderId: args['orderId'] as String,
+            status: args['status'] as String,
           ),
         );
 
