@@ -1,3 +1,4 @@
+import 'package:pasar_malam/core/services/deep_link_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,18 +14,20 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  
+  await DeepLinkService.init();
 
   final authProvider = AuthProvider();
   final productProvider = ProductProvider();
   final cartProvider = CartProvider();
-  final walletProvider = WalletProvider();   // Provider E-Wallet baru
-  final orderProvider = OrderProvider();     // Provider Orders baru
+  final walletProvider = WalletProvider();   
+  final orderProvider = OrderProvider();     
 
   authProvider.onLogin = (String userId) async {
     await Future.wait([
       cartProvider.loadUserCart(userId),
       productProvider.loadUserLikes(userId),
-      walletProvider.loadWallet(userId),     // Load wallet saat login
+      walletProvider.loadWallet(userId),     
     ]);
   };
 
@@ -41,8 +44,8 @@ void main() async {
         ChangeNotifierProvider.value(value: authProvider),
         ChangeNotifierProvider.value(value: productProvider),
         ChangeNotifierProvider.value(value: cartProvider),
-        ChangeNotifierProvider.value(value: walletProvider),   // Register E-Wallet
-        ChangeNotifierProvider.value(value: orderProvider),     // Register Orders
+        ChangeNotifierProvider.value(value: walletProvider),   
+        ChangeNotifierProvider.value(value: orderProvider),     
       ],
       child: const MyApp(),
     ),
@@ -57,6 +60,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Fashion Papua',
+      navigatorKey: DeepLinkService.navigatorKey, 
       initialRoute: AppRouter.splash,
       onGenerateRoute: AppRouter.onGenerateRoute,
     );
