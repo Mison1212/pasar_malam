@@ -5,7 +5,7 @@ import 'package:pasar_malam/features/auth/presentation/providers/auth_provider.d
 import 'package:provider/provider.dart';
 
 class SplashPage extends StatefulWidget {
-  const SplashPage({Key? key}) : super(key: key);
+  const SplashPage({super.key});
 
   @override
   State<SplashPage> createState() => _SplashPageState();
@@ -59,7 +59,7 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
 
     if (user != null) {
       if (user.emailVerified) {
-        // Muat data cart & likes milik user ini (auto-login dari sesi yang tersimpan)
+        
         final auth = context.read<AuthProvider>();
         if (auth.onLogin != null) {
           await auth.onLogin!(user.uid);
@@ -99,22 +99,25 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
                   child: Column(
                     children: [
                       Container(
-                        padding: const EdgeInsets.all(24),
+                        width: 160,
+                        height: 160,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.15),
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
+                              color: Colors.black.withOpacity(0.3),
                               blurRadius: 20,
                               offset: const Offset(0, 10),
                             ),
                           ],
                         ),
-                        child: const Icon(
-                          Icons.shopping_bag_outlined,
-                          size: 80,
-                          color: Colors.white,
+                        child: ClipOval(
+                          child: Image.asset(
+                            'assets/icons/logo_fp.jpeg',
+                            width: 160,
+                            height: 160,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 32),

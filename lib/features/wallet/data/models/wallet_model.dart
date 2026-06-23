@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pasar_malam/features/wallet/domain/entities/wallet_entity.dart';
 
-/// Model Firestore untuk Wallet.
-/// Extends WalletEntity dan menambahkan kemampuan serialisasi Firestore.
+
+
 class WalletModel extends WalletEntity {
-  final String? pinHash; // Hash SHA-256 dari PIN, tidak di-expose ke entity
+  final String? pinHash; 
 
   const WalletModel({
     required super.userId,
@@ -15,8 +15,8 @@ class WalletModel extends WalletEntity {
     this.pinHash,
   });
 
-  /// Membuat WalletModel dari document snapshot Firestore.
-  /// Document ID = firebase_uid user.
+  
+  
   factory WalletModel.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>? ?? {};
     return WalletModel(
@@ -29,7 +29,7 @@ class WalletModel extends WalletEntity {
     );
   }
 
-  /// Konversi ke Map untuk disimpan ke Firestore.
+  
   Map<String, dynamic> toFirestore() {
     return {
       'balance': balance,
@@ -42,7 +42,7 @@ class WalletModel extends WalletEntity {
     };
   }
 
-  /// Membuat wallet baru dengan saldo 0 untuk user yang baru pertama kali.
+  
   factory WalletModel.newWallet(String userId) {
     return WalletModel(
       userId: userId,

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -23,9 +22,15 @@ class AuthProvider extends ChangeNotifier {
   );
 
   AuthStatus _status = AuthStatus.initial;
-  User? _firebaseUser;
+  User? _firebaseUser = FirebaseAuth.instance.currentUser;
   String? _backendToken;
   String? _errorMessage;
+
+  AuthProvider() {
+    if (_firebaseUser != null && _firebaseUser!.emailVerified) {
+      _status = AuthStatus.authenticated;
+    }
+  }
 
   Future<void> Function(String userId)? onSignOut;
 

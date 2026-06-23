@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:pasar_malam/features/auth/presentation/providers/auth_provider.dart';
 import 'package:pasar_malam/features/cart/presentation/providers/cart_provider.dart';
 import 'package:pasar_malam/features/wallet/presentation/providers/wallet_provider.dart';
@@ -8,18 +9,18 @@ import 'package:pasar_malam/features/wallet/presentation/widgets/pin_bottom_shee
 import 'package:pasar_malam/core/routes/app_router.dart';
 import 'package:pasar_malam/features/orders/presentation/pages/order_success_page.dart';
 
-/// Halaman Checkout — Menampilkan ringkasan pesanan dan tombol pembayaran.
-/// 
-/// Alur "Buat Pesanan":
-/// 1. Cek apakah PIN sudah di-setup → jika belum, arahkan ke Setup PIN
-/// 2. Tampilkan PIN Bottom Sheet
-/// 3. Validasi PIN → jika salah, tampilkan error
-/// 4. Cek saldo → jika kurang, tampilkan error + arahkan ke Top Up
-/// 5. Jika sukses: Debit saldo → Buat order → Bersihkan cart → Success Page
+
+
+
+
+
+
+
+
 class CheckoutPage extends StatelessWidget {
   const CheckoutPage({super.key});
 
-  /// Format angka ke format Rupiah (contoh: 150.000)
+  
   String _formatCurrency(double amount) {
     return amount
         .toStringAsFixed(0)
@@ -76,7 +77,7 @@ class CheckoutPage extends StatelessWidget {
             ),
           ),
 
-          // ==================== PANEL BAWAH: TOTAL + TOMBOL BAYAR ====================
+          
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -94,7 +95,7 @@ class CheckoutPage extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Info saldo wallet
+                  
                   Consumer<WalletProvider>(
                     builder: (ctx, wallet, _) => Container(
                       padding: const EdgeInsets.all(12),
@@ -121,7 +122,7 @@ class CheckoutPage extends StatelessWidget {
                     ),
                   ),
 
-                  // Total pembayaran
+                  
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -134,18 +135,33 @@ class CheckoutPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
 
-                  // Tombol "Bayar dengan E-Wallet"
+                  
                   ElevatedButton.icon(
                     onPressed: () {
                       _handlePayment(context, cart);
                     },
                     icon: const Icon(Icons.account_balance_wallet, color: Colors.white),
                     label: const Text(
-                      'Bayar dengan E-Wallet',
+                      'Bayar via Saldo Internal',
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                     ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF1B5E20),
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  
+                  ElevatedButton.icon(
+                    onPressed: () => _handleExternalPayment(context, cart),
+                    icon: const Icon(Icons.open_in_new, color: Colors.white),
+                    label: const Text(
+                      'Bayar via Aplikasi E-Wallet',
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF1A237E),
                       padding: const EdgeInsets.symmetric(vertical: 15),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                     ),
@@ -159,8 +175,8 @@ class CheckoutPage extends StatelessWidget {
     );
   }
 
-  /// Alur utama pembayaran dengan E-Wallet.
-  /// Mengimplementasikan flow: PIN Check → PIN Input → Validate → Debit → Order.
+  
+  
   Future<void> _handlePayment(BuildContext context, CartProvider cart) async {
     final userId = context.read<AuthProvider>().firebaseUser?.uid;
     if (userId == null) {
@@ -172,7 +188,7 @@ class CheckoutPage extends StatelessWidget {
     final orderProvider = context.read<OrderProvider>();
     final totalAmount = cart.totalPrice;
 
-    // ==================== STEP 1: Cek apakah PIN sudah di-setup ====================
+    
     if (!walletProvider.isPinSet) {
       final shouldSetup = await showDialog<bool>(
         context: context,
@@ -202,21 +218,21 @@ class CheckoutPage extends StatelessWidget {
       return;
     }
 
-    // ==================== STEP 2: Cek saldo sebelum tampilkan PIN ====================
+    
     if (walletProvider.balance < totalAmount) {
       if (!context.mounted) return;
       _showInsufficientBalance(context, totalAmount, walletProvider.balance);
       return;
     }
 
-    // ==================== STEP 3: Tampilkan Bottom Sheet PIN ====================
+    
     if (!context.mounted) return;
     final pin = await PinBottomSheet.show(context, totalAmount: totalAmount);
 
-    // User membatalkan input PIN
+    
     if (pin == null) return;
 
-    // ==================== STEP 4: Loading indicator ====================
+    
     if (!context.mounted) return;
     showDialog(
       context: context,
@@ -238,20 +254,20 @@ class CheckoutPage extends StatelessWidget {
       ),
     );
 
-    // ==================== STEP 5: Debit saldo wallet ====================
+    
     final debitSuccess = await walletProvider.debit(
       userId,
       totalAmount,
       pin,
     );
 
-    // Tutup loading dialog
+    
     if (context.mounted) Navigator.of(context).pop();
 
     if (!debitSuccess) {
       if (!context.mounted) return;
 
-      // Cek jenis error
+      
       if (walletProvider.isPinError) {
         _showError(context, 'PIN yang Anda masukkan salah. Silakan coba lagi.');
       } else if (walletProvider.isInsufficientBalance) {
@@ -262,7 +278,7 @@ class CheckoutPage extends StatelessWidget {
       return;
     }
 
-    // ==================== STEP 6: Buat pesanan (status: PAID) ====================
+    
     final cartItems = cart.items.values
         .map((item) => {
               'product_id': item.product.id,
@@ -286,7 +302,7 @@ class CheckoutPage extends StatelessWidget {
       return;
     }
 
-    // ==================== STEP 7: Bersihkan cart & navigasi ke Success ====================
+    
     cart.clearCart(userId: userId);
 
     if (context.mounted) {
@@ -302,7 +318,7 @@ class CheckoutPage extends StatelessWidget {
     }
   }
 
-  /// Dialog error saldo tidak cukup dengan tombol Top Up
+  
   void _showInsufficientBalance(
       BuildContext context, double totalAmount, double currentBalance) {
     showDialog(
@@ -347,7 +363,87 @@ class CheckoutPage extends StatelessWidget {
     );
   }
 
-  /// Snackbar error umum
+  
+  Future<void> _handleExternalPayment(BuildContext context, CartProvider cart) async {
+    final userId = context.read<AuthProvider>().firebaseUser?.uid;
+    if (userId == null) {
+      _showError(context, 'User tidak ditemukan. Silakan login ulang.');
+      return;
+    }
+    
+    final orderProvider = context.read<OrderProvider>();
+    final totalAmount = cart.totalPrice;
+
+    
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const Center(
+        child: Card(
+          child: Padding(
+            padding: EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircularProgressIndicator(color: Color(0xFF1A237E)),
+                SizedBox(height: 16),
+                Text('Menyiapkan pesanan...'),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+    
+    
+    final cartItems = cart.items.values
+        .map((item) => {
+              'product_id': item.product.id,
+              'product_name': item.product.name,
+              'price': item.product.price,
+              'quantity': item.quantity,
+              'image_url': item.product.imageUrl,
+            })
+        .toList();
+
+    final orderId = await orderProvider.createOrder(
+      userId: userId,
+      items: cartItems,
+      totalAmount: totalAmount,
+    );
+
+    
+    if (context.mounted) Navigator.of(context).pop();
+
+    if (orderId == null) {
+      if (context.mounted) _showError(context, 'Gagal membuat pesanan untuk E-Wallet');
+      return;
+    }
+
+    
+    cart.clearCart(userId: userId);
+
+    
+    final Uri ewalletUrl = Uri.parse(
+      "myewallet://pay?order_id=$orderId&amount=$totalAmount&callback_url=mymarketplace://payment_result"
+    );
+
+    
+    try {
+      final launched = await launchUrl(ewalletUrl, mode: LaunchMode.externalApplication);
+      if (!launched) {
+        if (context.mounted) {
+          _showError(context, 'Gagal membuka aplikasi E-Wallet. Pastikan aplikasi terinstall di HP/Emulator ini.');
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        _showError(context, 'Gagal membuka aplikasi E-Wallet. Pastikan aplikasi terinstall di HP/Emulator ini.');
+      }
+    }
+  }
+
+  
   void _showError(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

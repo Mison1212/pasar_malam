@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/// Bottom Sheet untuk memasukkan PIN saat proses pembayaran.
-/// Menampilkan 6 input digit PIN dengan keyboard custom.
-///
-/// Cara penggunaan:
-/// ```dart
-/// final pin = await PinBottomSheet.show(context, totalAmount: 150000);
-/// if (pin != null) {
-///   // User memasukkan PIN, lanjutkan proses pembayaran
-/// }
-/// ```
+
+
+
+
+
+
+
+
+
+
 class PinBottomSheet extends StatefulWidget {
   final double totalAmount;
 
   const PinBottomSheet({super.key, required this.totalAmount});
 
-  /// Menampilkan bottom sheet dan return PIN jika user submit, null jika cancel.
+  
   static Future<String?> show(BuildContext context, {required double totalAmount}) {
     return showModalBottomSheet<String>(
       context: context,
@@ -35,7 +35,7 @@ class _PinBottomSheetState extends State<PinBottomSheet> {
   String? _errorMessage;
   static const int _pinLength = 6;
 
-  /// Format angka ke format Rupiah
+  
   String _formatCurrency(double amount) {
     return amount
         .toStringAsFixed(0)
@@ -45,7 +45,7 @@ class _PinBottomSheetState extends State<PinBottomSheet> {
         );
   }
 
-  /// Menambahkan digit ke PIN
+  
   void _addDigit(String digit) {
     if (_pinDigits.length < _pinLength) {
       setState(() {
@@ -53,14 +53,14 @@ class _PinBottomSheetState extends State<PinBottomSheet> {
         _errorMessage = null;
       });
 
-      // Auto-submit saat PIN sudah lengkap 6 digit
+      
       if (_pinDigits.length == _pinLength) {
         _submitPin();
       }
     }
   }
 
-  /// Menghapus digit terakhir
+  
   void _removeDigit() {
     if (_pinDigits.isNotEmpty) {
       setState(() {
@@ -70,11 +70,11 @@ class _PinBottomSheetState extends State<PinBottomSheet> {
     }
   }
 
-  /// Submit PIN — return PIN string ke caller
+  
   void _submitPin() {
     if (_pinDigits.length == _pinLength) {
       final pin = _pinDigits.join();
-      Navigator.of(context).pop(pin); // Return PIN ke caller
+      Navigator.of(context).pop(pin); 
     }
   }
 
@@ -92,7 +92,7 @@ class _PinBottomSheetState extends State<PinBottomSheet> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // ==================== HANDLE BAR ====================
+            
             Container(
               width: 40,
               height: 4,
@@ -105,7 +105,7 @@ class _PinBottomSheetState extends State<PinBottomSheet> {
 
             const SizedBox(height: 20),
 
-            // ==================== HEADER ====================
+            
             const Icon(Icons.lock, color: Color(0xFF1A237E), size: 36),
             const SizedBox(height: 12),
             const Text(
@@ -120,7 +120,7 @@ class _PinBottomSheetState extends State<PinBottomSheet> {
 
             const SizedBox(height: 24),
 
-            // ==================== PIN DOTS ====================
+            
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(_pinLength, (index) {
@@ -145,7 +145,7 @@ class _PinBottomSheetState extends State<PinBottomSheet> {
               }),
             ),
 
-            // ==================== ERROR MESSAGE ====================
+            
             if (_errorMessage != null)
               Padding(
                 padding: const EdgeInsets.only(top: 12),
@@ -157,7 +157,7 @@ class _PinBottomSheetState extends State<PinBottomSheet> {
 
             const SizedBox(height: 24),
 
-            // ==================== NUMPAD ====================
+            
             _buildNumPad(),
 
             const SizedBox(height: 16),
@@ -167,31 +167,31 @@ class _PinBottomSheetState extends State<PinBottomSheet> {
     );
   }
 
-  /// Numpad custom untuk input PIN
+  
   Widget _buildNumPad() {
     return Column(
       children: [
-        // Baris 1: 1, 2, 3
+        
         _buildNumRow(['1', '2', '3']),
-        // Baris 2: 4, 5, 6
+        
         _buildNumRow(['4', '5', '6']),
-        // Baris 3: 7, 8, 9
+        
         _buildNumRow(['7', '8', '9']),
-        // Baris 4: kosong, 0, hapus
+        
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            // Tombol cancel
+            
             _NumPadButton(
-              onTap: () => Navigator.of(context).pop(null), // Cancel tanpa return PIN
+              onTap: () => Navigator.of(context).pop(null), 
               child: const Text('Batal', style: TextStyle(color: Colors.red, fontWeight: FontWeight.w600)),
             ),
-            // Tombol 0
+            
             _NumPadButton(
               onTap: () => _addDigit('0'),
               child: const Text('0', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
             ),
-            // Tombol hapus
+            
             _NumPadButton(
               onTap: _removeDigit,
               child: const Icon(Icons.backspace_outlined, color: Color(0xFF1A237E)),
@@ -202,7 +202,7 @@ class _PinBottomSheetState extends State<PinBottomSheet> {
     );
   }
 
-  /// Satu baris numpad dengan 3 tombol
+  
   Widget _buildNumRow(List<String> digits) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -216,7 +216,7 @@ class _PinBottomSheetState extends State<PinBottomSheet> {
   }
 }
 
-/// Widget tombol numpad individual
+
 class _NumPadButton extends StatelessWidget {
   final Widget child;
   final VoidCallback onTap;
@@ -228,7 +228,7 @@ class _NumPadButton extends StatelessWidget {
     return InkWell(
       borderRadius: BorderRadius.circular(40),
       onTap: () {
-        HapticFeedback.lightImpact(); // Feedback haptic saat tekan
+        HapticFeedback.lightImpact(); 
         onTap();
       },
       child: Container(

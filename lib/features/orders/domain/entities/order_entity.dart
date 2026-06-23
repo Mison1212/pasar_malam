@@ -1,14 +1,14 @@
 import 'package:equatable/equatable.dart';
 
-/// Entity yang merepresentasikan sebuah pesanan (order).
-/// Menyimpan status pembayaran dan detail item yang dipesan.
+
+
 class OrderEntity extends Equatable {
   final String? id;
   final String userId;
-  final List<Map<String, dynamic>> items; // Daftar produk yang dipesan
+  final List<Map<String, dynamic>> items; 
   final double totalAmount;
-  final String status;          // "pending_payment", "paid", "canceled"
-  final String paymentMethod;   // "ewallet"
+  final String status;          
+  final String paymentMethod;   
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -23,10 +23,10 @@ class OrderEntity extends Equatable {
     this.updatedAt,
   });
 
-  /// Cek apakah pesanan sudah dibayar
+  
   bool get isPaid => status == 'paid';
 
-  /// Cek apakah pesanan masih menunggu pembayaran
+  
   bool get isPending => status == 'pending_payment';
 
   @override

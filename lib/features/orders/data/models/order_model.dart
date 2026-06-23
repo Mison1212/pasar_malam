@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pasar_malam/features/orders/domain/entities/order_entity.dart';
 
-/// Model Firestore untuk pesanan (orders).
+
 class OrderModel extends OrderEntity {
   const OrderModel({
     super.id,
@@ -14,7 +14,7 @@ class OrderModel extends OrderEntity {
     super.updatedAt,
   });
 
-  /// Membuat OrderModel dari document snapshot Firestore.
+  
   factory OrderModel.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>? ?? {};
     return OrderModel(
@@ -32,7 +32,7 @@ class OrderModel extends OrderEntity {
     );
   }
 
-  /// Konversi ke Map untuk disimpan ke Firestore.
+  
   Map<String, dynamic> toFirestore() {
     return {
       'user_id': userId,

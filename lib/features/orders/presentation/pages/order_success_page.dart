@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pasar_malam/core/routes/app_router.dart';
 
-/// Halaman sukses setelah pembayaran berhasil.
-/// Menampilkan informasi pesanan yang telah dibayar.
+
+
 class OrderSuccessPage extends StatelessWidget {
   final String orderId;
   final double totalAmount;
@@ -13,7 +13,7 @@ class OrderSuccessPage extends StatelessWidget {
     required this.totalAmount,
   });
 
-  /// Format angka ke format Rupiah
+  
   String _formatCurrency(double amount) {
     return amount
         .toStringAsFixed(0)
@@ -26,7 +26,7 @@ class OrderSuccessPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: false, // Prevent back button — harus lewat tombol
+      canPop: false, 
       child: Scaffold(
         backgroundColor: const Color(0xFFF5F5F5),
         body: SafeArea(
@@ -36,7 +36,7 @@ class OrderSuccessPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // ==================== IKON SUKSES ====================
+                  
                   Container(
                     width: 100,
                     height: 100,
@@ -56,7 +56,7 @@ class OrderSuccessPage extends StatelessWidget {
 
                   const SizedBox(height: 32),
 
-                  // ==================== JUDUL ====================
+                  
                   const Text(
                     'Pembayaran Berhasil! 🎉',
                     style: TextStyle(
@@ -76,7 +76,7 @@ class OrderSuccessPage extends StatelessWidget {
 
                   const SizedBox(height: 32),
 
-                  // ==================== DETAIL PESANAN ====================
+                  
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(20),
@@ -100,12 +100,12 @@ class OrderSuccessPage extends StatelessWidget {
 
                   const SizedBox(height: 40),
 
-                  // ==================== TOMBOL KEMBALI ====================
+                  
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        // Kembali ke dashboard, hapus semua route stack
+                        
                         Navigator.of(context).pushNamedAndRemoveUntil(
                           AppRouter.dashboard,
                           (route) => false,
@@ -125,7 +125,7 @@ class OrderSuccessPage extends StatelessWidget {
 
                   const SizedBox(height: 12),
 
-                  // Tombol ke wallet
+                  
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pushNamedAndRemoveUntil(
@@ -148,7 +148,7 @@ class OrderSuccessPage extends StatelessWidget {
   }
 }
 
-/// Widget untuk baris detail pesanan
+
 class _DetailRow extends StatelessWidget {
   final String label;
   final String value;

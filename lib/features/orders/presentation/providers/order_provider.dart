@@ -3,32 +3,32 @@ import 'package:pasar_malam/features/orders/data/repositories/order_repository_i
 import 'package:pasar_malam/features/orders/domain/entities/order_entity.dart';
 import 'package:pasar_malam/features/orders/domain/repositories/order_repository.dart';
 
-/// State management untuk fitur Orders.
-/// Mengelola pembuatan dan tracking pesanan.
+
+
 class OrderProvider extends ChangeNotifier {
   final OrderRepository _repository;
 
   OrderProvider({OrderRepository? repository})
       : _repository = repository ?? OrderRepositoryImpl();
 
-  // ==================== STATE ====================
+  
 
   List<OrderEntity> _orders = [];
   String? _lastOrderId;
   bool _isLoading = false;
   String? _errorMessage;
 
-  // ==================== GETTERS ====================
+  
 
   List<OrderEntity> get orders => _orders;
   String? get lastOrderId => _lastOrderId;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
-  // ==================== METHODS ====================
+  
 
-  /// Membuat pesanan baru dengan status 'paid' (sudah dibayar via e-wallet).
-  /// Return order ID jika berhasil, null jika gagal.
+  
+  
   Future<String?> createOrder({
     required String userId,
     required List<Map<String, dynamic>> items,
@@ -43,7 +43,7 @@ class OrderProvider extends ChangeNotifier {
         userId: userId,
         items: items,
         totalAmount: totalAmount,
-        status: 'paid', // Langsung PAID karena sudah di-debit dari wallet
+        status: 'paid', 
         paymentMethod: 'ewallet',
       );
 
@@ -60,7 +60,7 @@ class OrderProvider extends ChangeNotifier {
     }
   }
 
-  /// Load daftar pesanan milik user.
+  
   Future<void> loadUserOrders(String userId) async {
     try {
       _isLoading = true;

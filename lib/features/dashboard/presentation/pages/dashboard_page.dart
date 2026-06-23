@@ -117,11 +117,11 @@ class _DashboardPageState extends State<DashboardPage> {
             child: IconButton(
               icon: const Icon(Icons.logout_rounded, color: Colors.white70, size: 22),
               onPressed: () async {
-                // Navigate dulu SEBELUM signOut() agar dashboard tidak sempat
-                // rebuild dengan firebaseUser == null (mencegah flicker nama fallback)
+                
+                
                 if (!mounted) return;
                 Navigator.pushReplacementNamed(context, AppRouter.login);
-                auth.signOut(); // sengaja tidak di-await agar navigasi lebih dahulu
+                auth.signOut(); 
               },
             ),
           ),

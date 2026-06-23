@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
-/// Entity yang merepresentasikan dompet digital user.
-/// Ini adalah objek domain murni, tanpa dependensi framework.
+
+
 class WalletEntity extends Equatable {
   final String userId;
   final double balance;

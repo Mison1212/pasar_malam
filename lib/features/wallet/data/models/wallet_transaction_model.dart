@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pasar_malam/features/wallet/domain/entities/wallet_transaction_entity.dart';
 
-/// Model Firestore untuk transaksi wallet.
-/// Menyimpan setiap operasi topup/debit sebagai dokumen terpisah.
+
+
 class WalletTransactionModel extends WalletTransactionEntity {
   const WalletTransactionModel({
     super.id,
@@ -15,7 +15,7 @@ class WalletTransactionModel extends WalletTransactionEntity {
     super.createdAt,
   });
 
-  /// Membuat WalletTransactionModel dari document snapshot Firestore.
+  
   factory WalletTransactionModel.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>? ?? {};
     return WalletTransactionModel(
@@ -30,7 +30,7 @@ class WalletTransactionModel extends WalletTransactionEntity {
     );
   }
 
-  /// Konversi ke Map untuk disimpan ke Firestore.
+  
   Map<String, dynamic> toFirestore() {
     return {
       'wallet_id': walletId,

@@ -4,8 +4,8 @@ import 'package:pasar_malam/features/auth/presentation/providers/auth_provider.d
 import 'package:pasar_malam/features/wallet/presentation/providers/wallet_provider.dart';
 import 'package:pasar_malam/core/routes/app_router.dart';
 
-/// Halaman Dashboard E-Wallet.
-/// Menampilkan saldo, tombol Top Up, dan riwayat transaksi.
+
+
 class WalletDashboardPage extends StatefulWidget {
   const WalletDashboardPage({super.key});
 
@@ -17,7 +17,7 @@ class _WalletDashboardPageState extends State<WalletDashboardPage> {
   @override
   void initState() {
     super.initState();
-    // Load wallet data saat halaman dibuka
+    
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final userId = context.read<AuthProvider>().firebaseUser?.uid;
       if (userId != null) {
@@ -51,13 +51,13 @@ class _WalletDashboardPageState extends State<WalletDashboardPage> {
                 physics: const AlwaysScrollableScrollPhysics(),
                 child: Column(
                   children: [
-                    // ==================== CARD SALDO ====================
+                    
                     _buildBalanceCard(context, wallet),
 
-                    // ==================== MENU AKSI ====================
+                    
                     _buildActionButtons(context, wallet),
 
-                    // ==================== RIWAYAT TRANSAKSI ====================
+                    
                     _buildTransactionHistory(wallet),
                   ],
                 ),
@@ -66,7 +66,7 @@ class _WalletDashboardPageState extends State<WalletDashboardPage> {
     );
   }
 
-  /// Card gradient yang menampilkan saldo wallet.
+  
   Widget _buildBalanceCard(BuildContext context, WalletProvider wallet) {
     return Container(
       width: double.infinity,
@@ -132,13 +132,13 @@ class _WalletDashboardPageState extends State<WalletDashboardPage> {
     );
   }
 
-  /// Tombol aksi: Top Up dan Setup PIN.
+  
   Widget _buildActionButtons(BuildContext context, WalletProvider wallet) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
-          // Tombol Top Up
+          
           Expanded(
             child: _ActionButton(
               icon: Icons.add_circle_outline,
@@ -148,7 +148,7 @@ class _WalletDashboardPageState extends State<WalletDashboardPage> {
             ),
           ),
           const SizedBox(width: 12),
-          // Tombol Setup / Ubah PIN
+          
           Expanded(
             child: _ActionButton(
               icon: wallet.isPinSet ? Icons.lock_outline : Icons.lock_open,
@@ -162,7 +162,7 @@ class _WalletDashboardPageState extends State<WalletDashboardPage> {
     );
   }
 
-  /// Riwayat transaksi wallet.
+  
   Widget _buildTransactionHistory(WalletProvider wallet) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -237,7 +237,7 @@ class _WalletDashboardPageState extends State<WalletDashboardPage> {
   }
 }
 
-/// Widget reusable untuk tombol aksi di dashboard wallet.
+
 class _ActionButton extends StatelessWidget {
   final IconData icon;
   final String label;

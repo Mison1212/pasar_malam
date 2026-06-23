@@ -8,19 +8,19 @@ class DividerWithText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Expanded(child: Divider()),
+        Expanded(child: Divider(color: Colors.white.withOpacity(0.3))),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Text(
             text,
-            style: TextStyle(color: Colors.grey.shade500, fontSize: 13),
+            style: const TextStyle(color: Colors.white70, fontSize: 13),
           ),
         ),
-        const Expanded(child: Divider()),
+        Expanded(child: Divider(color: Colors.white.withOpacity(0.3))),
       ],
     );
   }
 }
 
-// Penggunaan:
-// DividerWithText(text: 'atau')   →   ─────── atau ───────
+
+

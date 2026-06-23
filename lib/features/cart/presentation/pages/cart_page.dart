@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:pasar_malam/features/auth/presentation/providers/auth_provider.dart';
 import 'package:pasar_malam/features/cart/presentation/providers/cart_provider.dart';
 import 'package:pasar_malam/core/routes/app_router.dart';
-import 'package:pasar_malam/features/dashboard/data/models/product_model.dart'; 
 
 class CartPage extends StatelessWidget {
   const CartPage({super.key});

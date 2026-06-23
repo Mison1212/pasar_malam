@@ -4,8 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:pasar_malam/features/auth/presentation/providers/auth_provider.dart';
 import 'package:pasar_malam/features/wallet/presentation/providers/wallet_provider.dart';
 
-/// Halaman Setup PIN 6 digit untuk E-Wallet.
-/// User harus memasukkan PIN dan konfirmasi PIN.
+
+
 class SetupPinPage extends StatefulWidget {
   const SetupPinPage({super.key});
 
@@ -29,12 +29,12 @@ class _SetupPinPageState extends State<SetupPinPage> {
     super.dispose();
   }
 
-  /// Proses simpan PIN baru
+  
   Future<void> _savePin() async {
     final pin = _pinController.text;
     final confirmPin = _confirmPinController.text;
 
-    // Validasi input
+    
     if (pin.length != 6) {
       _showSnackBar('PIN harus 6 digit', isError: true);
       return;
@@ -60,7 +60,7 @@ class _SetupPinPageState extends State<SetupPinPage> {
 
     if (success && mounted) {
       _showSnackBar('PIN berhasil disimpan!');
-      Navigator.of(context).pop(); // Kembali ke halaman sebelumnya
+      Navigator.of(context).pop(); 
     } else if (mounted) {
       _showSnackBar(
         context.read<WalletProvider>().errorMessage ?? 'Gagal menyimpan PIN',
@@ -100,7 +100,7 @@ class _SetupPinPageState extends State<SetupPinPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ==================== HEADER INFO ====================
+            
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(20),
@@ -135,7 +135,7 @@ class _SetupPinPageState extends State<SetupPinPage> {
 
             const SizedBox(height: 32),
 
-            // ==================== INPUT PIN ====================
+            
             const Text('PIN Baru', style: TextStyle(fontWeight: FontWeight.w600)),
             const SizedBox(height: 8),
             TextField(
@@ -146,7 +146,7 @@ class _SetupPinPageState extends State<SetupPinPage> {
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               onChanged: (val) {
                 if (val.length == 6) {
-                  _confirmFocus.requestFocus(); // Auto-focus ke konfirmasi
+                  _confirmFocus.requestFocus(); 
                 }
               },
               decoration: InputDecoration(
@@ -175,7 +175,7 @@ class _SetupPinPageState extends State<SetupPinPage> {
 
             const SizedBox(height: 20),
 
-            // ==================== KONFIRMASI PIN ====================
+            
             const Text('Konfirmasi PIN', style: TextStyle(fontWeight: FontWeight.w600)),
             const SizedBox(height: 8),
             TextField(
@@ -211,7 +211,7 @@ class _SetupPinPageState extends State<SetupPinPage> {
 
             const SizedBox(height: 32),
 
-            // ==================== TOMBOL SIMPAN ====================
+            
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(

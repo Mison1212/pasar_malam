@@ -21,25 +21,25 @@ class AuthHeader extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: (iconColor ?? const Color(0xFF1565C0)).withOpacity(0.1),
+            color: (iconColor ?? Colors.white).withOpacity(0.15),
             shape: BoxShape.circle,
           ),
           child: Icon(
             icon,
             size: 48,
-            color: iconColor ?? const Color(0xFF1565C0),
+            color: iconColor ?? Colors.white,
           ),
         ),
         const SizedBox(height: 20),
         Text(
           title,
-          style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+          style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         const SizedBox(height: 8),
         Text(
           subtitle,
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+          style: const TextStyle(fontSize: 14, color: Colors.white70),
         ),
       ],
     );

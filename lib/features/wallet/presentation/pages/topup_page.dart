@@ -4,8 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:pasar_malam/features/auth/presentation/providers/auth_provider.dart';
 import 'package:pasar_malam/features/wallet/presentation/providers/wallet_provider.dart';
 
-/// Halaman Top Up saldo wallet.
-/// User bisa memilih nominal preset atau input manual.
+
+
 class TopUpPage extends StatefulWidget {
   const TopUpPage({super.key});
 
@@ -18,7 +18,7 @@ class _TopUpPageState extends State<TopUpPage> {
   double? _selectedAmount;
   bool _isProcessing = false;
 
-  /// Daftar nominal preset untuk top up
+  
   final List<double> _presetAmounts = [
     50000,
     100000,
@@ -34,7 +34,7 @@ class _TopUpPageState extends State<TopUpPage> {
     super.dispose();
   }
 
-  /// Format angka ke format Rupiah
+  
   String _formatCurrency(double amount) {
     return amount
         .toStringAsFixed(0)
@@ -44,7 +44,7 @@ class _TopUpPageState extends State<TopUpPage> {
         );
   }
 
-  /// Proses top up saldo
+  
   Future<void> _processTopUp() async {
     final amount = _selectedAmount ?? double.tryParse(_amountController.text);
 
@@ -81,7 +81,7 @@ class _TopUpPageState extends State<TopUpPage> {
     }
   }
 
-  /// Dialog sukses setelah top up berhasil
+  
   void _showSuccessDialog(double amount) {
     showDialog(
       context: context,
@@ -106,8 +106,8 @@ class _TopUpPageState extends State<TopUpPage> {
           Center(
             child: ElevatedButton(
               onPressed: () {
-                Navigator.of(ctx).pop(); // Tutup dialog
-                Navigator.of(context).pop(); // Kembali ke wallet dashboard
+                Navigator.of(ctx).pop(); 
+                Navigator.of(context).pop(); 
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF1A237E),
@@ -147,7 +147,7 @@ class _TopUpPageState extends State<TopUpPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ==================== SALDO SAAT INI ====================
+            
             Consumer<WalletProvider>(
               builder: (ctx, wallet, _) => Container(
                 width: double.infinity,
@@ -176,7 +176,7 @@ class _TopUpPageState extends State<TopUpPage> {
 
             const SizedBox(height: 24),
 
-            // ==================== PILIH NOMINAL ====================
+            
             const Text('Pilih Nominal', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             const SizedBox(height: 12),
 
@@ -226,7 +226,7 @@ class _TopUpPageState extends State<TopUpPage> {
 
             const SizedBox(height: 24),
 
-            // ==================== INPUT MANUAL ====================
+            
             const Text('Atau Masukkan Nominal', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             const SizedBox(height: 12),
 
@@ -235,7 +235,7 @@ class _TopUpPageState extends State<TopUpPage> {
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               onChanged: (val) {
-                setState(() => _selectedAmount = null); // Reset preset
+                setState(() => _selectedAmount = null); 
               },
               decoration: InputDecoration(
                 prefixText: 'Rp ',
@@ -259,7 +259,7 @@ class _TopUpPageState extends State<TopUpPage> {
 
             const SizedBox(height: 32),
 
-            // ==================== TOMBOL TOP UP ====================
+            
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
